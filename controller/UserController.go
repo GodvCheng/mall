@@ -2,8 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"mall/common"
+	"mall/model"
 	"mall/service"
+	"net/http"
 )
 
 var UService = service.NewUService()
@@ -15,11 +16,13 @@ func UserLogin(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	var user = UService.UserLogin(username, password)
-	common.NewDataResult(user)
+	c.JSON(http.StatusOK, &user)
 }
 
 func UserUpdate(c *gin.Context) {
-
+	var user model.User
+	c.ShouldBind(&user)
+	UService.UpdateUser(&user)
 }
 
 func UploadAvatar(c *gin.Context) {

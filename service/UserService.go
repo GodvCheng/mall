@@ -19,7 +19,7 @@ type UserService struct {
 type UService interface {
 	UserRegister(c *gin.Context)
 	UserLogin(username, password string) model.User
-	UpdateUser(c *gin.Context, uId uint)
+	UpdateUser(user *model.User)
 }
 
 // NewUService 创建一个 UService接口
@@ -33,9 +33,9 @@ func (u *UserService) UserRegister(c *gin.Context) {
 
 func (u *UserService) UserLogin(username, password string) (user model.User) {
 	user = UserDao.UserLogin(username, password)
-	return
+	return user
 }
 
-func (u *UserService) UpdateUser(c *gin.Context, uId uint) {
-
+func (u *UserService) UpdateUser(user *model.User) {
+	UserDao.UpdateUser(user)
 }

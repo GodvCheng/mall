@@ -1,58 +1,93 @@
 package util
 
 import (
-	"encoding/json"
-	"fmt"
+	"errors"
 	"github.com/golang-jwt/jwt"
-	"log"
 	"time"
 )
 
-// 秘钥，如果要对接，问问上游生成的时候，有没有 秘钥
-var mySigningKey = []byte("helloGolang.")
+const TokenExpireDuration = time.Hour * 24
 
-//TokenHandle 解析token
-func TokenHandle(tokenString string) (string, error) {
-	token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-		return mySigningKey, nil
-	})
-	if err != nil {
-		log.Println(err.Error())
-		return "", err
-	}
-	data := token.Claims.(jwt.MapClaims)["data"]
-	var tokenData = new(TokenData)
-	if data != nil {
-		var info = data.(string)
-		err = json.Unmarshal([]byte(info), &tokenData)
-	}
+// JwtSecret 用于加盐
+var JwtSecret = []byte("jadon.ji")
 
-	return tokenData.UserId, err
+// Claims 自定义Claims
+type Claims struct {
+	ID        uint   `json:"id"`
+	Username  string `json:"username"`
+	Authority int    `json:"authority"`
+	jwt.StandardClaims
 }
 
-//CreateToken  created token
-func CreateToken(data TokenData) (string, error) {
-	dataByte, err := json.Marshal(data)
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"data": string(dataByte),
-		"exp":  time.Now().Unix() + 1000*5,
-		"iss":  "ibc_business",
-	})
-
-	tokenString, err := token.SignedString(mySigningKey)
-	if err != nil {
-		log.Fatal(err)
-		return "", err
+//GenerateToken 签发用户Token
+func GenerateToken(id uint, username string, authority int) (string, error) {
+	claims := Claims{
+		ID:        id,
+		Username:  username,
+		Authority: authority,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(TokenExpireDuration).Unix(),
+			Issuer:    "jadon", //签发人
+		},
 	}
-	fmt.Println("加密后的token字符串", tokenString)
-	return tokenString, nil
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := tokenClaims.SignedString(JwtSecret)
+	return token, err
 }
 
-//TokenData is 用户对象
-type TokenData struct {
-	UserId   string
-	Age      int32
-	NickName string
-	Name     string
-	Phone    string
+//ParseToken 验证用户token
+func ParseToken(token string) (*Claims, error) {
+	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return JwtSecret, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if tokenClaims != nil {
+		if claims, ok := tokenClaims.Claims.(*Claims); ok && tokenClaims.Valid {
+			return claims, nil
+		}
+	}
+	return nil, errors.New("invalid token")
+}
+
+//EmailClaims 邮箱
+type EmailClaims struct {
+	UserID        uint   `json:"user_id"`
+	Email         string `json:"email"`
+	Password      string `json:"password"`
+	OperationType uint   `json:"operation_type"`
+	jwt.StandardClaims
+}
+
+//GenerateEmailToken 签发邮箱验证Token
+func GenerateEmailToken(userID, Operation uint, email, password string) (string, error) {
+	nowTime := time.Now()
+	expireTime := nowTime.Add(15 * time.Minute)
+	claims := EmailClaims{
+		UserID:        userID,
+		Email:         email,
+		Password:      password,
+		OperationType: Operation,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expireTime.Unix(),
+			Issuer:    "cmall",
+		},
+	}
+	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	token, err := tokenClaims.SignedString(JwtSecret)
+	return token, err
+}
+
+//ParseEmailToken 验证邮箱验证token
+func ParseEmailToken(token string) (*EmailClaims, error) {
+	tokenClaims, err := jwt.ParseWithClaims(token, &EmailClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return JwtSecret, nil
+	})
+	if tokenClaims != nil {
+		if claims, ok := tokenClaims.Claims.(*EmailClaims); ok && tokenClaims.Valid {
+			return claims, nil
+		}
+	}
+	return nil, err
 }

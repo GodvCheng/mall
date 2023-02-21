@@ -2,43 +2,31 @@ package common
 
 import "net/http"
 
-const (
-	CodeSuccess        = "SUCCESS"
-	CodeError          = "ERROR"
-	ParamFormatError   = "PARAM_FORMAT_ERROR"
-	ParamNotExistError = "PARAM_NOT_EXIST_ERROR"
-	AppNotExistError   = "APP_NOT_EXIST_ERROR"
-	AppExistError      = "APP_EXIST_ERROR"
-
-	InternalServiceErr = "INTERNAL_SERVICE_ERROR"
-
-	Unauthorized = "UNAUTHORIZED"
-)
-
 // Result 定义统一结果返回
 type Result struct {
-	Code    string `json:"code"`
+	Code    int    `json:"code"`
 	Data    any    `json:"data"`
 	Message string `json:"message"`
 }
 
 func NewOkResult(msg string) *Result {
 	return &Result{
-		Code:    CodeSuccess,
+		Code:    SUCCESS,
 		Data:    nil,
 		Message: msg,
 	}
 }
 
+// NewDataResult 返回数据
 func NewDataResult(data any) *Result {
 	return &Result{
-		Code:    CodeSuccess,
+		Code:    SUCCESS,
 		Data:    data,
 		Message: "",
 	}
 }
 
-func NewErrorResult(code, msg string) *Result {
+func NewErrorResult(code int, msg string) *Result {
 	return &Result{
 		Code:    code,
 		Data:    nil,
@@ -50,6 +38,10 @@ type Error struct {
 	Status int
 	Code   string
 	Msg    string
+}
+
+func (e *Error) Error() string {
+	return e.Msg
 }
 
 func BadRequestErr(code string, msg string) error {
@@ -82,8 +74,4 @@ func InternalServerErr(code string, msg string) error {
 		Code:   code,
 		Msg:    msg,
 	}
-}
-
-func (e *Error) Error() string {
-	return e.Msg
 }

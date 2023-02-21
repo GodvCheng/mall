@@ -7,7 +7,7 @@ import (
 
 func LoadProduct(r *gin.Engine) {
 
-	group := r.Group("/user")
+	group := r.Group("/pro")
 	{
 		//商品操作
 		group.GET("products", controller.ListProducts)

@@ -9,25 +9,23 @@ import (
 )
 
 type DbConfig struct {
-	Host     string
-	User     string
-	Password string
-	DbName   string
+	Host     string `yaml:"Host"`
+	User     string `yaml:"User"`
+	Password string `yaml:"Password"`
+	DbName   string `yaml:"DbName"`
 }
 
-type Struct struct {
-	Mysql DbConfig
-}
+type MySqlConfig DbConfig
 
-var Config Struct
+var Config MySqlConfig
 
 //初始化优先加载
 func init() {
-	appName := "app"
+	appName := "App"
 	//设置要读取的配置文件目录
 	viper.AddConfigPath("./resource")
 	configEnv := os.Getenv("GO_ENV")
-	//默认读取app.yml
+	//默认读取App.yml
 	if configEnv != "" {
 		appName += "-" + configEnv
 	}
