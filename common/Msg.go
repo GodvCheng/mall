@@ -3,7 +3,6 @@ package common
 var MsgFlags = map[int]string{
 	SUCCESS:               "ok",
 	UpdatePasswordSuccess: "修改密码成功",
-	NotExistInentifier:    "该第三方账号未绑定",
 	ERROR:                 "fail",
 	InvalidParams:         "请求参数错误",
 
@@ -15,7 +14,6 @@ var MsgFlags = map[int]string{
 	ErrorFailEncryption:     "加密失败",
 	ErrorNotExistProduct:    "该商品不存在",
 	ErrorNotExistAddress:    "该收获地址不存在",
-	ErrorExistFavorite:      "已收藏该商品",
 	ErrorUserNotFound:       "用户不存在",
 
 	ErrorBossCheckTokenFail:        "商家的Token鉴权失败",

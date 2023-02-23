@@ -4,6 +4,6 @@ import "github.com/jinzhu/gorm"
 
 type GoodsImage struct {
 	gorm.Model
-	Image      string //商品图片
-	GoodsSkuId int    //商品sku
+	Image      string `form:"Image"`      //商品图片
+	GoodsSkuId int    `form:"GoodsSkuId"` //商品sku
 }

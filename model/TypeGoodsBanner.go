@@ -4,8 +4,8 @@ import "github.com/jinzhu/gorm"
 
 type TypeGoodsBanner struct {
 	gorm.Model
-	GoodsTypeId int //商品类型
-	GoodsSkuId  int //商品sku
-	DisplayType int //展示类型 0代表文字，1代表图片
-	Index       int //展示顺序
+	GoodsTypeId int `form:"GoodsTypeId"` //商品类型
+	GoodsSkuId  int `form:"GoodsSkuId"`  //商品sku
+	DisplayType int `form:"DisplayType"` //展示类型 0代表文字，1代表图片
+	Index       int `form:"Index"`       //展示顺序
 }

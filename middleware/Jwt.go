@@ -10,10 +10,11 @@ import (
 //JWT token验证中间件
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code = 200
+		var code = common.SUCCESS
 		var data interface{}
-		token := c.GetHeader("Authorization")
-		if token == "" { //token为空
+		token := c.GetHeader("token")
+		//token, _ := c.Cookie("Authorization")
+		if token == "" {
 			code = 404
 		} else {
 			claims, err := util.ParseToken(token)
@@ -39,17 +40,18 @@ func JWT() gin.HandlerFunc {
 //JWTAdmin token验证中间件
 func JWTAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code int
+		var code = common.SUCCESS
 		var data interface{}
-		token := c.GetHeader("Authorization")
-		if token == "" { //token为空
+		token := c.GetHeader("token")
+		//token, _ := c.Cookie("Authorization")
+		if token == "" {
 			code = common.InvalidParams
 		} else {
 			claims, err := util.ParseToken(token)
 			if err != nil {
 				code = common.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {
-				code = common.ErrorAuthCheckTokenTimeout
+				code = common.ErrorAuthCheckTokenTimeout //过期
 			} else if claims.Authority == 0 {
 				code = common.ErrorAuthInsufficientAuthority
 			}
@@ -63,6 +65,6 @@ func JWTAdmin() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		c.Next()
+		c.Next() //放行
 	}
 }

@@ -16,7 +16,7 @@ var Db *gorm.DB
 func InitDb() {
 	//todo 从App.yml文件中读取配置信息
 	//dataSource := fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8mb4&parseTime=true", conf.Config.User, conf.Config.Password, conf.Config.Host, conf.Config.DbName)
-	dataSource := "root:141097@(localhost:3306)/mall?charset=utf8mb4&parseTime=true"
+	dataSource := "root:141097@(localhost:3306)/mall?charset=utf8mb4&parseTime=true&loc=Local"
 	db, err := gorm.Open("mysql", dataSource)
 	if err != nil {
 		fmt.Printf("gorm open failed,error:%v\n", err)

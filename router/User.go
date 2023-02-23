@@ -15,25 +15,31 @@ func LoadUser(r *gin.Engine) {
 		}))
 	})
 
-	//管理员用户操作
+	//用户操作
 	group := r.Group("/user")
 	{
-		//登录
+		//登录 todo 判断是用户还是管理员
 		group.POST("/login", controller.UserLogin)
-		//需要权限
-		auth := group.Group("/")
-		auth.Use(middleware.JWTAdmin())
+		//后台管理员
+		mAuth := group.Group("/")
+		mAuth.Use(middleware.JWTAdmin())
 		{
-			//注册
-			group.POST("/register", controller.UserRegister)
+			//后台人员注册
+			mAuth.POST("/register", controller.UserRegister)
+			//获取用户信息
+			mAuth.GET("/info", controller.GetUserInfo)
 			//更新
-			group.PUT("/update/:id", controller.UserUpdate)
+			mAuth.PUT("/update/:id", controller.UserUpdate)
 			//头像上传
-			group.POST("/upload/", controller.UploadAvatar)
-			//发送邮箱
-			group.POST("/sendEmail", controller.SendEmail)
-			//验证邮箱
-			group.POST("/valEmail", controller.ValidEmail)
+			mAuth.POST("/upload", controller.UploadAvatar)
+		}
+		//前台访客
+		uAuth := group.Group("/api")
+		uAuth.POST("/register", controller.ApiUserRegister)
+		uAuth.Use(middleware.JWT())
+		{
+			uAuth.POST("/api/update/:id")
+
 		}
 	}
 }

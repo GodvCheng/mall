@@ -4,9 +4,9 @@ import "github.com/jinzhu/gorm"
 
 type OrderGoods struct { //订单商品表
 	gorm.Model
-	OrderInfoId int    //订单id
-	GoodsSkuId  int    //商品id
-	Count       int    //商品数量
-	Price       int    //商品价格
-	Comment     string //订单评论
+	OrderInfoId int    `form:"OrderInfoId"` //订单id
+	GoodsSkuId  int    `form:"GoodsSkuId"`  //商品id
+	Count       int    `form:"Count"`       //商品数量
+	Price       int    `form:"Price"`       //商品价格
+	Comment     string `form:"Comment"`     //订单评论
 }

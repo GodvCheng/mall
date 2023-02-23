@@ -18,5 +18,4 @@ func main() {
 	router.LoadUser(r)
 	router.LoadProduct(r)
 	r.Run(":8888")
-
 }

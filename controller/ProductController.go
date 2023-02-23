@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"mall/model"
 	"mall/service"
 )
 
@@ -9,7 +10,8 @@ var ProductService = service.NewProductService()
 
 // CreateProduct 创建商品
 func CreateProduct(c *gin.Context) {
-
+	var goods model.GoodsSku
+	c.ShouldBind(&goods)
 }
 
 // ListProducts 商品列表
