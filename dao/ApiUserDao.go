@@ -16,5 +16,5 @@ type ApiUserDao struct {
 
 func (a ApiUserDao) ApiUserRegister(user *model.User) {
 	Db.Create(user)
-	Db.Model(user).Update("authority", 0)
+	Db.Model(user).Updates(map[string]interface{}{"authority": 0, "status": 1})
 }

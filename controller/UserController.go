@@ -1,20 +1,28 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/model"
+	"mall/result"
 	"mall/service"
-	"net/http"
 	"strconv"
 )
 
-var UService = service.NewUService()
+var UserService = service.NewUService()
 
 func UserRegister(c *gin.Context) {
 	var user model.User
 	c.ShouldBind(&user)
-	UService.ManagerRegister(&user)
+	err := UserService.ManagerRegister(&user)
+	if err != nil {
+		result.Fail(c, result.Response{
+			Code:    result.ErrorFailEncryption,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithMsg(c, "注册成功")
+	}
 	//c.Request.Header.Del("Authorization")
 }
 func UserLogin(c *gin.Context) {
@@ -22,22 +30,37 @@ func UserLogin(c *gin.Context) {
 	c.ShouldBind(&user)
 	username := user.Username
 	password := user.Password
-	token := UService.UserLogin(username, password)
-	c.Header("token", token)
-	// todo 注意删除这段代码
-	c.JSON(http.StatusOK, gin.H{
-		"token": token,
-	})
+	token, err := UserService.UserLogin(username, password)
+
+	if err != nil || token == "" {
+		result.Fail(c, result.Response{
+			Code:    result.ErrorAuthToken,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		//将token设置到请求头中
+		c.Header("token", token)
+		result.OkWithData(c, gin.H{
+			"token": token,
+		})
+	}
 
 }
 
 func GetUserInfo(c *gin.Context) {
-	token := c.Request.Header.Get("token")
-	fmt.Println("token = ", token)
-	//token, _ := c.Cookie("token")
-	fmt.Println(token)
-	user := UService.GetUserInfo(token)
-	c.JSON(http.StatusOK, user)
+	token := c.MustGet("token")
+	user, err := UserService.GetUserInfo(token.(string))
+	if err != nil {
+		result.Fail(c, result.Response{
+			Code:    result.ErrorAuthCheckTokenFail,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithData(c, user)
+	}
+
 }
 
 func UserUpdate(c *gin.Context) {
@@ -45,7 +68,16 @@ func UserUpdate(c *gin.Context) {
 	c.ShouldBind(&user)
 	id, _ := strconv.Atoi(c.Param("id"))
 	user.ID = uint(id)
-	UService.UpdateUser(&user)
+	err := UserService.UpdateUser(&user)
+	if err != nil {
+		result.Fail(c, result.Response{
+			Code:    result.ERROR,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithMsg(c, "修改成功")
+	}
 }
 
 func UploadAvatar(c *gin.Context) {

@@ -1,9 +1,8 @@
-package common
+package result
 
 const (
 	SUCCESS               = 200
 	UpdatePasswordSuccess = 201
-	NotExistInentifier    = 202
 	ERROR                 = 500
 	InvalidParams         = 400
 
@@ -16,7 +15,6 @@ const (
 	ErrorFailEncryption     = 10006
 	ErrorNotExistProduct    = 10007
 	ErrorNotExistAddress    = 10008
-	ErrorExistFavorite      = 10009
 	ErrorUserNotFound       = 10010
 
 	// ErrorBossCheckTokenFail 店家错误
@@ -35,7 +33,7 @@ const (
 	ErrorAuthCheckTokenFail        = 30001 //token 错误
 	ErrorAuthCheckTokenTimeout     = 30002 //token 过期
 	ErrorAuthToken                 = 30003
-	ErrorAuth                      = 30004
+	ErrorAuth                      = 508
 	ErrorAuthInsufficientAuthority = 30005
 	ErrorReadFile                  = 30006
 	ErrorSendEmail                 = 30007

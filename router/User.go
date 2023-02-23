@@ -2,7 +2,6 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"mall/common"
 	"mall/controller"
 	"mall/middleware"
 	"net/http"
@@ -10,9 +9,9 @@ import (
 
 func LoadUser(r *gin.Engine) {
 	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, common.NewDataResult(gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"message": "ok",
-		}))
+		})
 	})
 
 	//用户操作
@@ -39,7 +38,6 @@ func LoadUser(r *gin.Engine) {
 		uAuth.Use(middleware.JWT())
 		{
 			uAuth.POST("/api/update/:id")
-
 		}
 	}
 }

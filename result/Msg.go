@@ -1,11 +1,10 @@
-package common
+package result
 
 var MsgFlags = map[int]string{
-	SUCCESS:               "ok",
-	UpdatePasswordSuccess: "修改密码成功",
-	ERROR:                 "fail",
-	InvalidParams:         "请求参数错误",
-
+	SUCCESS:                 "ok",
+	UpdatePasswordSuccess:   "修改密码成功",
+	ERROR:                   "fail",
+	InvalidParams:           "请求参数错误",
 	ErrorExistNick:          "已存在该昵称",
 	ErrorExistUser:          "已存在该用户名",
 	ErrorNotExistUser:       "该用户不存在",

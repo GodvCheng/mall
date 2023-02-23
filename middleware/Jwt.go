@@ -1,8 +1,9 @@
 package middleware
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"mall/common"
+	"mall/result"
 	"mall/util"
 	"time"
 )
@@ -10,29 +11,29 @@ import (
 //JWT token验证中间件
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code = common.SUCCESS
+		var code = result.SUCCESS
 		var data interface{}
 		token := c.GetHeader("token")
-		//token, _ := c.Cookie("Authorization")
 		if token == "" {
-			code = 404
+			code = result.ErrorAuth
 		} else {
 			claims, err := util.ParseToken(token)
 			if err != nil { //解析出错
-				code = common.ErrorAuthCheckTokenFail
+				code = result.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt { //超时
-				code = common.ErrorAuthCheckTokenTimeout
+				code = result.ErrorAuthCheckTokenTimeout
 			}
 		}
-		if code != common.SUCCESS {
-			c.JSON(200, gin.H{
-				"status": code,
-				"msg":    common.GetMsg(code),
-				"data":   data,
+		if code != result.SUCCESS {
+			c.JSON(result.ERROR, gin.H{
+				"code":    code,
+				"message": result.GetMsg(code),
+				"data":    data,
 			})
 			c.Abort()
 			return
 		}
+		c.Set("token", token)
 		c.Next()
 	}
 }
@@ -40,31 +41,32 @@ func JWT() gin.HandlerFunc {
 //JWTAdmin token验证中间件
 func JWTAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code = common.SUCCESS
+		var code = result.SUCCESS
 		var data interface{}
 		token := c.GetHeader("token")
-		//token, _ := c.Cookie("Authorization")
+		fmt.Println(token)
 		if token == "" {
-			code = common.InvalidParams
+			code = result.ErrorAuth
 		} else {
 			claims, err := util.ParseToken(token)
 			if err != nil {
-				code = common.ErrorAuthCheckTokenFail
+				code = result.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {
-				code = common.ErrorAuthCheckTokenTimeout //过期
+				code = result.ErrorAuthCheckTokenTimeout //过期
 			} else if claims.Authority == 0 {
-				code = common.ErrorAuthInsufficientAuthority
+				code = result.ErrorAuthInsufficientAuthority
 			}
 		}
-		if code != common.SUCCESS {
-			c.JSON(200, gin.H{
-				"status": code,
-				"msg":    common.GetMsg(code),
-				"data":   data,
+		if code != result.SUCCESS {
+			c.JSON(result.ERROR, gin.H{
+				"code":    code,
+				"message": result.GetMsg(code),
+				"data":    data,
 			})
 			c.Abort()
 			return
 		}
+		c.Set("token", token)
 		c.Next() //放行
 	}
 }
