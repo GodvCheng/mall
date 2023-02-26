@@ -4,8 +4,8 @@ import "github.com/jinzhu/gorm"
 
 type PromotionBanner struct {
 	gorm.Model
-	Name  string `form:"Name"`  //活动名称
-	Url   string `form:"Url"`   //活动链接
-	Image string `form:"Image"` //活动图片
-	Index int    `form:"Index"` //展示顺序
+	Name  string `json:"name"form:"name"`   //活动名称
+	Url   string `json:"url"form:"url"`     //活动链接
+	Image string `json:"image"form:"image"` //活动图片
+	Sort  int    `json:"sort"form:"sort"`   //展示顺序
 }

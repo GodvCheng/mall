@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/model"
 	"mall/result"
@@ -71,7 +72,7 @@ func UserUpdate(c *gin.Context) {
 	err := UserService.UpdateUser(&user)
 	if err != nil {
 		result.Fail(c, result.Response{
-			Code:    result.ERROR,
+			Code:    509,
 			Message: err.Error(),
 			Data:    nil,
 		})
@@ -79,9 +80,39 @@ func UserUpdate(c *gin.Context) {
 		result.OkWithMsg(c, "修改成功")
 	}
 }
-
+func DisableUser(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	UserService.DisableUser(id)
+	result.OkWithMsg(c, "修改成功")
+}
 func UploadAvatar(c *gin.Context) {
+	file, err := c.FormFile("img")
+	if err != nil {
+		return
+	}
+	name := file.Filename
+	fmt.Println(name)
+}
 
+func Logout(c *gin.Context) {
+	token := c.GetHeader("token")
+	if token != "" {
+		c.Request.Header.Del("token")
+		result.OkWithMsg(c, "退出成功")
+	}
+}
+
+func UserList(c *gin.Context) {
+	userList, err := UserService.UserList()
+	if err != nil {
+		result.Fail(c, result.Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithData(c, userList)
+	}
 }
 
 func SendEmail(c *gin.Context) {

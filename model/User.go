@@ -14,6 +14,7 @@ type User struct {
 	Avatar    string       `json:"avatar"form:"avatar"`              //头像
 	Status    int          `json:"status"form:"status"`              //状态 0:未激活 1:激活
 	Authority int          `json:"authority"form:"authority"`        //权限
-	Address   []*Address   `gorm:"-"`
-	OrderInfo []*OrderInfo `gorm:"-"`
+	Role      string       `json:"role" form:"role"`
+	Address   []*Address   `json:"address"gorm:"-"`
+	OrderInfo []*OrderInfo `json:"orderInfo"gorm:"-"`
 }

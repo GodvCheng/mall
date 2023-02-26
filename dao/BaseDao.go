@@ -27,12 +27,14 @@ func InitDb() {
 	sqlDB.SetMaxOpenConns(100) //打开
 	sqlDB.SetConnMaxLifetime(time.Second * 30)
 	Db = db
+	//生成的数据库表明不带s
 	db.SingularTable(true)
 	//自动迁移
 	db.AutoMigrate(&model.User{}, &model.Address{}, &model.GoodsImage{},
 		&model.GoodsSku{}, &model.GoodsSpu{}, &model.GoodsType{},
 		&model.GoodsBanner{}, &model.TypeGoodsBanner{},
-		&model.PromotionBanner{}, &model.OrderGoods{}, &model.OrderInfo{})
+		&model.PromotionBanner{}, &model.OrderGoods{}, &model.OrderInfo{},
+		&model.Role{}, &model.Menu{}, &model.RoleMenu{}, &model.Dict{})
 }
 
 // CloseDb main.go中调用

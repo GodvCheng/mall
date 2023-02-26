@@ -53,7 +53,7 @@ func JWTAdmin() gin.HandlerFunc {
 				code = result.ErrorAuthCheckTokenFail
 			} else if time.Now().Unix() > claims.ExpiresAt {
 				code = result.ErrorAuthCheckTokenTimeout //过期
-			} else if claims.Authority == 0 {
+			} else if claims.Authority == 0 { //权限不足
 				code = result.ErrorAuthInsufficientAuthority
 			}
 		}

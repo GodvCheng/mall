@@ -6,8 +6,7 @@ const (
 	ERROR                 = 500
 	InvalidParams         = 400
 
-	// ErrorExistNick 成员错误
-	ErrorExistNick          = 10001
+	// ErrorExistUser 成员错误
 	ErrorExistUser          = 10002
 	ErrorNotExistUser       = 10003
 	ErrorNotCompare         = 10004

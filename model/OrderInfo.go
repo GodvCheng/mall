@@ -7,15 +7,15 @@ import (
 
 type OrderInfo struct { //订单商品表
 	gorm.Model
-	OrderNum     string        `form:"OrderNum" gorm:"unique"` //订单编号
-	UserId       int           `form:"OrderNum"`               //用户id
-	AddressId    int           `form:"UserId"`                 //地址ID
-	PayMethod    int           `form:"AddressId"`              //付款方式
-	TotalCount   int           `form:"PayMethod"`              //商品数量
-	TotalPrice   int           `form:"TotalCount"`             //商品总价
-	TransitPrice int           `form:"TotalPrice"`             //运费
-	OrderStatus  int           `form:"TransitPrice"`           //订单状态
-	TradeNo      string        `form:"TradeNo" gorm:"unique"`  //支付编号
-	Time         time.Time     `form:"Time"`                   //评论时间
-	OrderGoods   []*OrderGoods `gorm:"-"`
+	OrderNo      string        `json:"orderNo"form:"order_no" gorm:"unique"` //订单编号
+	UserId       int           `json:"userId"form:"user_id"`                 //用户id
+	AddressId    int           `json:"addressId"form:"address_id"`           //地址ID
+	PayMethod    int           `json:"payMethod"form:"pay_method"`           //付款方式
+	TotalCount   int           `json:"totalCount"form:"total_count"`         //商品数量
+	TotalPrice   float64       `json:"totalPrice"form:"total_price"`         //商品总价
+	TransitPrice float64       `json:"transitPrice"form:"transit_price"`     //运费
+	OrderStatus  int           `json:"orderStatus"form:"order_status"`       //订单状态
+	TradeNo      string        `json:"tradeNo"form:"trade_no" gorm:"unique"` //支付编号
+	CommentTime  time.Time     `json:"commentTime"form:"comment_time"`       //评论时间
+	OrderGoods   []*OrderGoods `json:"orderGoods"gorm:"-"`
 }

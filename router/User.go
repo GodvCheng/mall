@@ -14,30 +14,27 @@ func LoadUser(r *gin.Engine) {
 		})
 	})
 
-	//用户操作
 	group := r.Group("/user")
 	{
-		//登录 todo 判断是用户还是管理员
+		//登录
 		group.POST("/login", controller.UserLogin)
-		//后台管理员
-		mAuth := group.Group("/")
-		mAuth.Use(middleware.JWTAdmin())
+		//获取个人信息 普通权限
+		group.GET("/info", middleware.JWT(), controller.GetUserInfo)
+		group.POST("/logout", middleware.JWT(), controller.Logout)
+		//头像上传
+		group.POST("/upload", middleware.JWT(), controller.UploadAvatar)
+		adminAuth := group.Group("/")
+		//超级管理员权限
+		adminAuth.Use(middleware.JWTAdmin())
 		{
 			//后台人员注册
-			mAuth.POST("/register", controller.UserRegister)
-			//获取用户信息
-			mAuth.GET("/info", controller.GetUserInfo)
+			adminAuth.POST("/register", controller.UserRegister)
+			//禁用用户
+			adminAuth.PUT("/disable/:id", controller.DisableUser)
 			//更新
-			mAuth.PUT("/update/:id", controller.UserUpdate)
-			//头像上传
-			mAuth.POST("/upload", controller.UploadAvatar)
-		}
-		//前台访客
-		uAuth := group.Group("/api")
-		uAuth.POST("/register", controller.ApiUserRegister)
-		uAuth.Use(middleware.JWT())
-		{
-			uAuth.POST("/api/update/:id")
+			adminAuth.PUT("/update/:id", controller.UserUpdate)
+			//获取用户列表
+			adminAuth.GET("/userList", controller.UserList)
 		}
 	}
 }
