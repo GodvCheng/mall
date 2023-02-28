@@ -14,7 +14,7 @@ var Db *gorm.DB
 
 // InitDb 初始化数据库连接 main.go中调用
 func InitDb() {
-	//todo 从App.yml文件中读取配置信息
+	//TODO 从App.yml文件中读取配置信息
 	//dataSource := fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8mb4&parseTime=true", conf.Config.User, conf.Config.Password, conf.Config.Host, conf.Config.DbName)
 	dataSource := "root:141097@(localhost:3306)/mall?charset=utf8mb4&parseTime=true&loc=Local"
 	db, err := gorm.Open("mysql", dataSource)

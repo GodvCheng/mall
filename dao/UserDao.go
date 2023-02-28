@@ -12,12 +12,22 @@ type UDao interface {
 	ExistUser(username string) int
 	ExistPhone(phone string) int
 	ExistEmail(email string) int
-	GetUserInfo(username string) *model.User
+	GetUserInfo(username string) model.User
 	DisableUser(userId int) int
 	UserList() []*dto.UserDto
+	EnableUser(id int) int
+}
+
+func NewUserDao() UDao {
+	return &UserDao{}
 }
 
 type UserDao struct {
+}
+
+func (u *UserDao) EnableUser(id int) int {
+	num := Db.Model(&model.User{}).Where("id = ?", id).Update("status", 1).RowsAffected
+	return int(num)
 }
 
 func (u *UserDao) UserList() (userList []*dto.UserDto) {
@@ -30,13 +40,10 @@ func (u *UserDao) DisableUser(userId int) int {
 	return int(num)
 }
 
-func NewUserDao() UDao {
-	return &UserDao{}
-}
-func (u *UserDao) GetUserInfo(username string) *model.User {
+func (u *UserDao) GetUserInfo(username string) model.User {
 	var user model.User
 	Db.Where("username = ?", username).First(&user)
-	return &user
+	return user
 }
 
 func (u *UserDao) ExistUser(username string) int {

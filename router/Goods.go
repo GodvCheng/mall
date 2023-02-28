@@ -14,7 +14,6 @@ func LoadProduct(r *gin.Engine) {
 		//普通权限
 		mAuth.Use(middleware.JWT())
 		{
-			//商品操作
 			//创建商品
 			mAuth.POST("/create", controller.CreateGoods)
 			//更新商品
@@ -28,6 +27,8 @@ func LoadProduct(r *gin.Engine) {
 			mAuth.GET("/imgs/:id", controller.ListGoodsImg)     //商品图片
 			mAuth.GET("/categories", controller.ListCategories) //商品分类
 			mAuth.GET("/carousels", controller.ListCarousels)   //轮播图
+			mAuth.PUT("/disable/:id", controller.DisableGoods)
+			mAuth.PUT("/enable/:id", controller.EnableGoods)
 		}
 	}
 }

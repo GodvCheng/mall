@@ -1,7 +1,7 @@
 package dto
 
 type UserDto struct {
-	Id        int    `json:"id"form:"id"`
+	ID        int    `json:"id"form:"id"`
 	Username  string `json:"username"form:"username"` //用户名
 	Name      string `json:"name" form:"name"`        //真实姓名
 	Sex       string `json:"sex"form:"sex"`
@@ -11,5 +11,5 @@ type UserDto struct {
 	Avatar    string `json:"avatar"form:"avatar"`       //头像
 	Status    int    `json:"status"form:"status"`       //状态 0:未激活 1:激活
 	Authority int    `json:"authority"form:"authority"` //权限
-	Role      string `json:"role" form:"role"`
+	Roles     string `json:"roles" form:"roles"`
 }

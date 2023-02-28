@@ -40,7 +40,7 @@ func UserLogin(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		//将token设置到请求头中
+		//将token设置到请求头中 TODO 使用template时可以不用将token设置到请求头中
 		c.Header("token", token)
 		result.OkWithData(c, gin.H{
 			"token": token,
@@ -82,8 +82,29 @@ func UserUpdate(c *gin.Context) {
 }
 func DisableUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	UserService.DisableUser(id)
-	result.OkWithMsg(c, "修改成功")
+	err := UserService.DisableUser(id)
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithMsg(c, "用户禁用成功")
+	}
+}
+func EnableUser(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	err := UserService.EnableUser(id)
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithMsg(c, "用户启用成功")
+	}
 }
 func UploadAvatar(c *gin.Context) {
 	file, err := c.FormFile("img")
