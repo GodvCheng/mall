@@ -14,6 +14,7 @@ type UService interface {
 	DisableUser(id int) error
 	EnableUser(id int) error
 	UserList() ([]*dto.UserDto, error)
+	GetRoles(token string) ([]*model.Role, error)
 }
 
 // NewUService 创建一个UService接口

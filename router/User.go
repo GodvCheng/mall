@@ -18,12 +18,18 @@ func LoadUser(r *gin.Engine) {
 	{
 		//登录
 		group.POST("/login", controller.UserLogin)
-		//获取个人信息 普通权限
-		group.POST("/info", middleware.JWT(), controller.GetUserInfo)
-		//退出登录
-		group.POST("/logout", middleware.JWT(), controller.Logout)
-		//头像上传 TODO
-		group.POST("/upload", middleware.JWT(), controller.UploadAvatar)
+		//普通权限
+		mAuth := group.Group("/")
+		mAuth.Use(middleware.JWT())
+		{
+			//获取个人信息
+			mAuth.POST("/info", controller.GetUserInfo)
+			//退出登录
+			mAuth.POST("/logout", controller.Logout)
+			//头像上传 TODO
+			mAuth.POST("/upload", controller.UploadAvatar)
+
+		}
 		adminAuth := group.Group("/")
 		//超级管理员权限
 		adminAuth.Use(middleware.JWTAdmin())
@@ -38,6 +44,8 @@ func LoadUser(r *gin.Engine) {
 			adminAuth.PUT("/update/:id", controller.UserUpdate)
 			//获取用户列表
 			adminAuth.GET("/userList", controller.UserList)
+			//获取角色列表
+			adminAuth.GET("/roles", controller.GetRoles)
 		}
 	}
 }

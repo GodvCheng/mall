@@ -16,6 +16,7 @@ type UDao interface {
 	DisableUser(userId int) int
 	UserList() []*dto.UserDto
 	EnableUser(id int) int
+	GetRoles() []*model.Role
 }
 
 func NewUserDao() UDao {
@@ -23,6 +24,11 @@ func NewUserDao() UDao {
 }
 
 type UserDao struct {
+}
+
+func (u *UserDao) GetRoles() (roles []*model.Role) {
+	Db.Find(&roles)
+	return
 }
 
 func (u *UserDao) EnableUser(id int) int {

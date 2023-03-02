@@ -17,17 +17,22 @@ func LoadProduct(r *gin.Engine) {
 			//创建商品
 			mAuth.POST("/create", controller.CreateGoods)
 			//更新商品
-			mAuth.PUT("/update/:id", controller.UpdateGoods)
+			mAuth.PUT("/update", controller.UpdateGoods)
 			//查询所有商品
 			mAuth.GET("/list", controller.ListGoods)
-			//展示某个商品详情
+			//展示商品详情
 			mAuth.GET("/:id", controller.ShowGoods)
 			//根据条件搜索商品
 			mAuth.POST("/goods", controller.SearchGoods)
-			mAuth.GET("/imgs/:id", controller.ListGoodsImg)     //商品图片
-			mAuth.GET("/categories", controller.ListCategories) //商品分类
-			mAuth.GET("/carousels", controller.ListCarousels)   //轮播图
+			//商品图片
+			mAuth.GET("/imgs/:id", controller.ListGoodsImg)
+			//商品分类
+			mAuth.GET("/categories", controller.ListCategories)
+			//轮播图
+			mAuth.GET("/carousels", controller.ListCarousels)
+			//下架商品
 			mAuth.PUT("/disable/:id", controller.DisableGoods)
+			//上架商品
 			mAuth.PUT("/enable/:id", controller.EnableGoods)
 		}
 	}

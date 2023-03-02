@@ -15,6 +15,21 @@ var UserDao = dao.NewUserDao()
 type UserService struct {
 }
 
+func (u *UserService) GetRoles(token string) (roles []*model.Role, err error) {
+	claims, err1 := util.ParseToken(token)
+	if err1 != nil {
+		err = err1
+		return nil, err
+	} else if claims.Authority == 0 {
+		return nil, errors.New("权限不足")
+	}
+	roles = UserDao.GetRoles()
+	if len(roles) == 0 {
+		return nil, errors.New("角色列表为空")
+	}
+	return roles, nil
+}
+
 func (u *UserService) EnableUser(id int) error {
 	n := UserDao.EnableUser(id)
 	if n == 0 {
@@ -67,8 +82,10 @@ func (u *UserService) GetUserInfo(token string) (userDto dto.UserDto, err error)
 	}
 	username := claims.Username
 	user := UserDao.GetUserInfo(username)
-	//需要传入结构体指针
+	//将结构体A的值赋值给结构体B 需要传入结构体指针
 	util.Copy(&userDto, &user)
+	userDto.Roles = make([]string, 1)
+	userDto.Roles[0] = user.Role
 	return userDto, nil
 }
 

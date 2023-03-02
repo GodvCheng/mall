@@ -13,6 +13,14 @@ var GoodsDao = dao.NewGoodsDao()
 type GoodsService struct {
 }
 
+func (g *GoodsService) ListCategories() (listCategories []*model.GoodsType, err error) {
+	listCategories = GoodsDao.ListCategories()
+	if len(listCategories) == 0 {
+		return nil, errors.New("查询商品分类失败")
+	}
+	return
+}
+
 func (g *GoodsService) EnableGoods(id int) (err error) {
 	n := GoodsDao.EnableGoods(id)
 	if n == 0 {
@@ -33,14 +41,6 @@ func (g *GoodsService) DeleteGoods(id int) (err error) {
 	num := GoodsDao.DeleteGoods(id)
 	if num == 0 {
 		return errors.New("删除商品sku失败")
-	}
-	return
-}
-
-func (g *GoodsService) ListGoodsType() (list []*model.GoodsType, err error) {
-	list = GoodsDao.ListGoodsType()
-	if len(list) == 0 {
-		return nil, errors.New("查询商品分类列表失败")
 	}
 	return
 }

@@ -13,9 +13,9 @@ type GService interface {
 	ListGoods() ([]dto.GoodsSkuDto, error)
 	SearchGoods(id int) (*model.GoodsSku, error)
 	ListGoodsImg(id int) (imgList []*dto.GoodsSkuDto, err error)
-	ListGoodsType() ([]*model.GoodsType, error)
 	DisableGoods(id int) error
 	EnableGoods(id int) error
+	ListCategories() ([]*model.GoodsType, error)
 }
 
 func NewGoodsService() GService {

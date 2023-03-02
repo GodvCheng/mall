@@ -136,6 +136,20 @@ func UserList(c *gin.Context) {
 	}
 }
 
+func GetRoles(c *gin.Context) {
+	token := c.GetHeader("token")
+	roles, err := UserService.GetRoles(token)
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithData(c, roles)
+	}
+}
+
 func SendEmail(c *gin.Context) {
 
 }

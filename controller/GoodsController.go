@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/model"
 	"mall/result"
@@ -77,8 +78,7 @@ func DeleteGoods(c *gin.Context) {
 func UpdateGoods(c *gin.Context) {
 	var goodsSku model.GoodsSku
 	c.ShouldBind(&goodsSku)
-	id, _ := strconv.Atoi(c.Param("id"))
-	goodsSku.ID = uint(id)
+	fmt.Println(goodsSku)
 	err := GoodsService.UpdateGoods(&goodsSku)
 	if err != nil {
 		result.Fail(c, Response{
@@ -111,19 +111,6 @@ func ListGoodsImg(c *gin.Context) {
 	}
 }
 
-func ListGoodSType(c *gin.Context) {
-	listGoodsType, err := GoodsService.ListGoodsType()
-	if err != nil {
-		result.Fail(c, Response{
-			Code:    509,
-			Message: err.Error(),
-			Data:    nil,
-		})
-	} else {
-		result.OkWithData(c, listGoodsType)
-	}
-}
-
 func DisableGoods(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	err := GoodsService.DisableGoods(id)
@@ -150,4 +137,21 @@ func EnableGoods(c *gin.Context) {
 	} else {
 		result.OkWithMsg(c, "商品上架成功")
 	}
+}
+
+func ListCategories(c *gin.Context) {
+	listCategories, err := GoodsService.ListCategories()
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithData(c, listCategories)
+	}
+}
+
+func ListCarousels(c *gin.Context) {
+
 }

@@ -11,10 +11,11 @@ type GDao interface {
 	ListGoods() []dto.GoodsSkuDto
 	SearchGoods(id int) *model.GoodsSku
 	ListGoodsImg(id int) []*dto.GoodsSkuDto
-	ListGoodsType() []*model.GoodsType
+
 	DeleteGoods(id int) int
 	DisableGoods(id int) int
 	EnableGoods(id int) int
+	ListCategories() []*model.GoodsType
 }
 
 func NewGoodsDao() GDao {
@@ -22,6 +23,11 @@ func NewGoodsDao() GDao {
 }
 
 type GoodsDao struct {
+}
+
+func (g *GoodsDao) ListCategories() (listCategories []*model.GoodsType) {
+	Db.Find(&listCategories)
+	return
 }
 
 func (g *GoodsDao) EnableGoods(id int) int {
@@ -39,11 +45,6 @@ func (g *GoodsDao) DeleteGoods(id int) int {
 	return int(num)
 }
 
-func (g *GoodsDao) ListGoodsType() (list []*model.GoodsType) {
-	Db.Find(&list)
-	return
-}
-
 func (g *GoodsDao) ListGoodsImg(id int) (imgList []*dto.GoodsSkuDto) {
 	Db.Raw(`SELECT i.image FROM goods_sku s join goods_image i on s.id = i.goods_sku_id where s.id = ?`, id).Scan(&imgList)
 	return imgList
@@ -57,7 +58,7 @@ func (g *GoodsDao) SearchGoods(id int) *model.GoodsSku {
 
 func (g *GoodsDao) ListGoods() (goodsList []dto.GoodsSkuDto) {
 	//TODO 两张表连接查询，表中字段名重复，起别名，无法映射到结构体
-	Db.Raw(`SELECT s.id,s.name,t.name goodsTypeName,s.price,s.sales,s.desc,s.image,s.stock,s.unite,s.status 
+	Db.Raw(`SELECT s.id,s.name,t.name ,s.price,s.sales,s.desc,s.image,s.stock,s.unite,s.status 
 			FROM goods_sku s left JOIN goods_type t ON s.goods_type_id = t.id`).Scan(&goodsList)
 	return
 }
