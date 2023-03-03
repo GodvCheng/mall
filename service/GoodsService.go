@@ -12,7 +12,7 @@ type GService interface {
 	DeleteGoods(id int) error
 	ListGoods() ([]dto.GoodsSkuDto, error)
 	SearchGoods(id int) (*model.GoodsSku, error)
-	ListGoodsImg(id int) (imgList []*dto.GoodsSkuDto, err error)
+	ListGoodsImg(id int) (imgList []string, err error)
 	DisableGoods(id int) error
 	EnableGoods(id int) error
 	ListCategories() ([]*model.GoodsType, error)

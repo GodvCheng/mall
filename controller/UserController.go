@@ -32,7 +32,6 @@ func UserLogin(c *gin.Context) {
 	username := user.Username
 	password := user.Password
 	token, err := UserService.UserLogin(username, password)
-
 	if err != nil || token == "" {
 		result.Fail(c, result.Response{
 			Code:    result.ErrorAuthToken,
@@ -41,7 +40,7 @@ func UserLogin(c *gin.Context) {
 		})
 	} else {
 		//将token设置到请求头中 TODO 使用template时可以不用将token设置到请求头中
-		c.Header("token", token)
+		//c.Header("token", token)
 		result.OkWithData(c, gin.H{
 			"token": token,
 		})

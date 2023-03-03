@@ -45,7 +45,7 @@ func (g *GoodsService) DeleteGoods(id int) (err error) {
 	return
 }
 
-func (g *GoodsService) ListGoodsImg(id int) (imgList []*dto.GoodsSkuDto, err error) {
+func (g *GoodsService) ListGoodsImg(id int) (imgList []string, err error) {
 	imgList = GoodsDao.ListGoodsImg(id)
 	if len(imgList) == 0 {
 		return nil, errors.New("查询商品相关图片失败")

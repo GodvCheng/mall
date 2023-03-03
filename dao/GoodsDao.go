@@ -10,8 +10,8 @@ type GDao interface {
 	CreateGoods(sku *model.GoodsSku) int
 	ListGoods() []dto.GoodsSkuDto
 	SearchGoods(id int) *model.GoodsSku
-	ListGoodsImg(id int) []*dto.GoodsSkuDto
-
+	//ListGoodsImg(id int) []*dto.GoodsSkuDto
+	ListGoodsImg(id int) []string
 	DeleteGoods(id int) int
 	DisableGoods(id int) int
 	EnableGoods(id int) int
@@ -45,9 +45,9 @@ func (g *GoodsDao) DeleteGoods(id int) int {
 	return int(num)
 }
 
-func (g *GoodsDao) ListGoodsImg(id int) (imgList []*dto.GoodsSkuDto) {
-	Db.Raw(`SELECT i.image FROM goods_sku s join goods_image i on s.id = i.goods_sku_id where s.id = ?`, id).Scan(&imgList)
-	return imgList
+func (g *GoodsDao) ListGoodsImg(id int) (imgList []string) {
+	Db.Raw(`SELECT i.image FROM goods_sku s join goods_image i on s.id = i.goods_sku_id where s.id = ?`, id).Pluck("image", &imgList)
+	return
 }
 
 func (g *GoodsDao) SearchGoods(id int) *model.GoodsSku {
