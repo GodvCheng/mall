@@ -31,16 +31,22 @@ func CreateGoods(c *gin.Context) {
 
 // ListGoods 商品列表
 func ListGoods(c *gin.Context) {
-	goodsList, err := GoodsService.ListGoods()
+	current, _ := strconv.Atoi(c.Param("current"))
+	pageSize, _ := strconv.Atoi(c.Param("pageSize"))
+	goodsList, total, err := GoodsService.ListGoods(current, pageSize)
 	if err != nil {
 		result.Fail(c, Response{
-			Code:    510,
+			Code:    result.ERROR,
 			Message: err.Error(),
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, goodsList)
+		result.OkWithData(c, gin.H{
+			"goodsList": goodsList,
+			"total":     total,
+		})
 	}
+
 }
 
 // ShowGoods 商品详情
@@ -139,6 +145,7 @@ func EnableGoods(c *gin.Context) {
 	}
 }
 
+// ListCategories 商品种类
 func ListCategories(c *gin.Context) {
 	listCategories, err := GoodsService.ListCategories()
 	if err != nil {
@@ -154,4 +161,18 @@ func ListCategories(c *gin.Context) {
 
 func ListCarousels(c *gin.Context) {
 
+}
+
+func GoodsTypeInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	goodsType, err := GoodsService.GoodsTypeInfo(id)
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithData(c, goodsType)
+	}
 }

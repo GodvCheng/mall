@@ -13,6 +13,14 @@ var GoodsDao = dao.NewGoodsDao()
 type GoodsService struct {
 }
 
+func (g *GoodsService) GoodsTypeInfo(id int) (goodsType *model.GoodsType, err error) {
+	goodsType = GoodsDao.GoodsTypeInfo(id)
+	if reflect.DeepEqual(goodsType, model.GoodsType{}) {
+		return nil, errors.New("获取商品种类详情失败")
+	}
+	return
+}
+
 func (g *GoodsService) ListCategories() (listCategories []*model.GoodsType, err error) {
 	listCategories = GoodsDao.ListCategories()
 	if len(listCategories) == 0 {
@@ -61,15 +69,13 @@ func (g *GoodsService) SearchGoods(id int) (goods *model.GoodsSku, err error) {
 	return
 }
 
-func (g *GoodsService) ListGoods() (goodsList []dto.GoodsSkuDto, err error) {
-	goodsList = GoodsDao.ListGoods()
+func (g *GoodsService) ListGoods(current, pageSize int) (goodsList []*dto.GoodsSkuDto, total int, err error) {
+	goodsList, total = GoodsDao.ListGoods(current, pageSize)
 	if len(goodsList) == 0 {
-		err = errors.New("查询商品列表失败")
-		return nil, err
+		return nil, 0, errors.New("分页查询商品列表失败")
 	}
-	return goodsList, nil
+	return
 }
-
 func (g *GoodsService) CreateGoods(sku *model.GoodsSku) (err error) {
 	n := GoodsDao.CreateGoods(sku)
 	if n == 0 {

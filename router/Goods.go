@@ -19,7 +19,7 @@ func LoadProduct(r *gin.Engine) {
 			//更新商品
 			mAuth.PUT("/update", controller.UpdateGoods)
 			//查询所有商品
-			mAuth.GET("/list", controller.ListGoods)
+			mAuth.GET("/list/:current/:pageSize", controller.ListGoods)
 			//展示商品详情
 			mAuth.GET("/:id", controller.ShowGoods)
 			//根据条件搜索商品
@@ -34,6 +34,8 @@ func LoadProduct(r *gin.Engine) {
 			mAuth.PUT("/disable/:id", controller.DisableGoods)
 			//上架商品
 			mAuth.PUT("/enable/:id", controller.EnableGoods)
+			//
+			mAuth.GET("/goodsType/:id", controller.GoodsTypeInfo)
 		}
 	}
 }

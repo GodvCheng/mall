@@ -46,6 +46,8 @@ func LoadUser(r *gin.Engine) {
 			adminAuth.GET("/userList", controller.UserList)
 			//获取角色列表
 			adminAuth.GET("/roles", controller.GetRoles)
+			//
+			adminAuth.GET("/userInfo/:id", controller.AdminGetUserInfo)
 		}
 	}
 }

@@ -8,14 +8,14 @@ import (
 type GDao interface {
 	UpdateGoods(sku *model.GoodsSku) int
 	CreateGoods(sku *model.GoodsSku) int
-	ListGoods() []dto.GoodsSkuDto
+	ListGoods(current, pageSize int) ([]*dto.GoodsSkuDto, int)
 	SearchGoods(id int) *model.GoodsSku
-	//ListGoodsImg(id int) []*dto.GoodsSkuDto
 	ListGoodsImg(id int) []string
 	DeleteGoods(id int) int
 	DisableGoods(id int) int
 	EnableGoods(id int) int
 	ListCategories() []*model.GoodsType
+	GoodsTypeInfo(id int) *model.GoodsType
 }
 
 func NewGoodsDao() GDao {
@@ -23,6 +23,18 @@ func NewGoodsDao() GDao {
 }
 
 type GoodsDao struct {
+}
+
+func (g *GoodsDao) GoodsTypeInfo(id int) *model.GoodsType {
+	var goodsType model.GoodsType
+	Db.Where("id = ?", id).Find(&goodsType)
+	return &goodsType
+}
+
+func (g *GoodsDao) ListGoods(current, pageSize int) (goodsList []*dto.GoodsSkuDto, total int) {
+	Db.Table("goods_sku").Scopes(Paginate(current, pageSize)).Find(&goodsList)
+	Db.Table("goods_sku").Count(&total)
+	return
 }
 
 func (g *GoodsDao) ListCategories() (listCategories []*model.GoodsType) {
@@ -54,13 +66,6 @@ func (g *GoodsDao) SearchGoods(id int) *model.GoodsSku {
 	var good model.GoodsSku
 	Db.Where("id = ?", id).Find(&good)
 	return &good
-}
-
-func (g *GoodsDao) ListGoods() (goodsList []dto.GoodsSkuDto) {
-	//TODO 两张表连接查询，表中字段名重复，起别名，无法映射到结构体
-	Db.Raw(`SELECT s.id,s.name,t.name ,s.price,s.sales,s.desc,s.image,s.stock,s.unite,s.status 
-			FROM goods_sku s left JOIN goods_type t ON s.goods_type_id = t.id`).Scan(&goodsList)
-	return
 }
 
 func (g *GoodsDao) CreateGoods(sku *model.GoodsSku) int {

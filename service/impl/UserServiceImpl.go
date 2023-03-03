@@ -7,12 +7,21 @@ import (
 	"mall/model"
 	"mall/model/dto"
 	"mall/util"
+	"reflect"
 )
 
 var UserDao = dao.NewUserDao()
 
 // UserService 管理用户服务
 type UserService struct {
+}
+
+func (u *UserService) AdminGetUserInfo(id int) (user *model.User, err error) {
+	user = UserDao.AdminGetUserInfo(id)
+	if reflect.DeepEqual(user, model.User{}) {
+		return nil, errors.New("管理员查询用户信息失败")
+	}
+	return
 }
 
 func (u *UserService) GetRoles(token string) (roles []*model.Role, err error) {

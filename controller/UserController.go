@@ -33,7 +33,7 @@ func UserLogin(c *gin.Context) {
 	password := user.Password
 	token, err := UserService.UserLogin(username, password)
 	if err != nil || token == "" {
-		result.Fail(c, result.Response{
+		result.Fail(c, Response{
 			Code:    result.ErrorAuthToken,
 			Message: err.Error(),
 			Data:    nil,
@@ -52,7 +52,7 @@ func GetUserInfo(c *gin.Context) {
 	token := c.MustGet("token")
 	user, err := UserService.GetUserInfo(token.(string))
 	if err != nil {
-		result.Fail(c, result.Response{
+		result.Fail(c, Response{
 			Code:    result.ErrorAuthCheckTokenFail,
 			Message: err.Error(),
 			Data:    nil,
@@ -70,7 +70,7 @@ func UserUpdate(c *gin.Context) {
 	user.ID = uint(id)
 	err := UserService.UpdateUser(&user)
 	if err != nil {
-		result.Fail(c, result.Response{
+		result.Fail(c, Response{
 			Code:    509,
 			Message: err.Error(),
 			Data:    nil,
@@ -125,7 +125,7 @@ func Logout(c *gin.Context) {
 func UserList(c *gin.Context) {
 	userList, err := UserService.UserList()
 	if err != nil {
-		result.Fail(c, result.Response{
+		result.Fail(c, Response{
 			Code:    509,
 			Message: err.Error(),
 			Data:    nil,
@@ -146,6 +146,20 @@ func GetRoles(c *gin.Context) {
 		})
 	} else {
 		result.OkWithData(c, roles)
+	}
+}
+
+func AdminGetUserInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	user, err := UserService.AdminGetUserInfo(id)
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithData(c, user)
 	}
 }
 
