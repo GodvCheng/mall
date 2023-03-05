@@ -51,6 +51,11 @@ func ParseToken(token string) (*Claims, error) {
 	return nil, errors.New("invalid token")
 }
 
+//RefreshToken token 刷新
+func RefreshToken() {
+
+}
+
 //EmailClaims 邮箱
 type EmailClaims struct {
 	UserID        uint   `json:"user_id"`

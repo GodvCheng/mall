@@ -97,11 +97,6 @@ func UpdateGoods(c *gin.Context) {
 	}
 }
 
-// SearchGoods 根据条件搜索商品
-func SearchGoods(c *gin.Context) {
-
-}
-
 // ListGoodsImg 商品图片
 func ListGoodsImg(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))

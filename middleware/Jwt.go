@@ -15,8 +15,13 @@ func JWT() gin.HandlerFunc {
 		var data interface{}
 		token := c.GetHeader("token")
 		if token == "" {
-			code = result.ErrorAuth
+			code = result.ErrorAuthIsNull
 		} else {
+			//从redis中取出token
+			redisToken := util.Rdb.Get(util.Ctx, "token")
+			if redisToken.Val() != token {
+				code = result.ErrorUserNotLogin
+			}
 			claims, err := util.ParseToken(token)
 			if err != nil { //解析出错
 				code = result.ErrorAuthCheckTokenFail
@@ -45,10 +50,14 @@ func JWTAdmin() gin.HandlerFunc {
 		var code = result.SUCCESS
 		var data interface{}
 		token := c.GetHeader("token")
-		fmt.Println(token)
 		if token == "" {
-			code = result.ErrorAuth
+			code = result.ErrorAuthIsNull
 		} else {
+			//从redis中取出token
+			redisToken := util.Rdb.Get(util.Ctx, "token")
+			if redisToken.Val() != token {
+				code = result.ErrorUserNotLogin
+			}
 			claims, err := util.ParseToken(token)
 			if err != nil {
 				code = result.ErrorAuthCheckTokenFail

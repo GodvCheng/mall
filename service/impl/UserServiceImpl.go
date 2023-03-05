@@ -8,18 +8,31 @@ import (
 	"mall/model/dto"
 	"mall/util"
 	"reflect"
+	"time"
 )
 
 var UserDao = dao.NewUserDao()
+
+var Rdb = util.Rdb
+var Ctx = util.Ctx
 
 // UserService 管理用户服务
 type UserService struct {
 }
 
-func (u *UserService) AdminGetUserInfo(id int) (user *model.User, err error) {
+func (u *UserService) GetProfile(id int) (user *model.User, err error) {
+	user = UserDao.GetProfile(id)
+	if reflect.DeepEqual(*user, model.User{}) {
+		return nil, errors.New("查询个人信息失败")
+	}
+	return
+}
+
+func (u *UserService) AdminGetUserInfo(id int) (user *dto.UserDto, err error) {
+
 	user = UserDao.AdminGetUserInfo(id)
-	if reflect.DeepEqual(user, model.User{}) {
-		return nil, errors.New("管理员查询用户信息失败")
+	if reflect.DeepEqual(*user, dto.UserDto{}) {
+		return nil, errors.New("查询用户信息失败")
 	}
 	return
 }
@@ -91,7 +104,7 @@ func (u *UserService) GetUserInfo(token string) (userDto dto.UserDto, err error)
 	}
 	username := claims.Username
 	user := UserDao.GetUserInfo(username)
-	//将结构体A的值赋值给结构体B 需要传入结构体指针
+	//将结构体A的值赋值给结构体B 需要先声明结构体然后取地址传入，不能直接传指针
 	util.Copy(&userDto, &user)
 	userDto.Roles = make([]string, 1)
 	userDto.Roles[0] = user.Role
@@ -116,6 +129,8 @@ func (u *UserService) UserLogin(username, password string) (token string, err er
 				//登录成功返回token
 				//管理员authority为1，普通用户为0
 				token, _ = util.GenerateToken(user.ID, user.Username, user.Authority)
+				//将token存入redis
+				Rdb.Set(Ctx, "token", token, time.Minute*30)
 				return token, nil
 			}
 		}

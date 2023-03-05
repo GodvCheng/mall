@@ -17,7 +17,8 @@ type UDao interface {
 	UserList() []*dto.UserDto
 	EnableUser(id int) int
 	GetRoles() []*model.Role
-	AdminGetUserInfo(id int) *model.User
+	AdminGetUserInfo(id int) *dto.UserDto
+	GetProfile(id int) *model.User
 }
 
 func NewUserDao() UDao {
@@ -27,9 +28,15 @@ func NewUserDao() UDao {
 type UserDao struct {
 }
 
-func (u *UserDao) AdminGetUserInfo(id int) *model.User {
+func (u *UserDao) GetProfile(id int) *model.User {
 	var user model.User
 	Db.Where("id = ?", id).Find(&user)
+	return &user
+}
+
+func (u *UserDao) AdminGetUserInfo(id int) *dto.UserDto {
+	var user dto.UserDto
+	Db.Table("user").Where("id = ?", id).Find(&user)
 	return &user
 }
 
@@ -44,7 +51,7 @@ func (u *UserDao) EnableUser(id int) int {
 }
 
 func (u *UserDao) UserList() (userList []*dto.UserDto) {
-	Db.Table("user").Find(&userList)
+	Db.Table("user").Where("authority = ?", 0).Find(&userList)
 	return
 }
 

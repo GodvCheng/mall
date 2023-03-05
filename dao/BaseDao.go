@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	log "github.com/sirupsen/logrus"
+	"mall/conf"
 	"mall/model"
 	"time"
 )
@@ -14,9 +15,7 @@ var Db *gorm.DB
 
 // InitDb 初始化数据库连接 main.go中调用
 func InitDb() {
-	//TODO 从App.yml文件中读取配置信息
-	//dataSource := fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8mb4&parseTime=true", conf.Config.User, conf.Config.Password, conf.Config.Host, conf.Config.DbName)
-	dataSource := "root:141097@(localhost:3306)/mall?charset=utf8mb4&parseTime=true&loc=Local"
+	dataSource := fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8mb4&parseTime=true&loc=Local", conf.MysqlConf.User, conf.MysqlConf.Password, conf.MysqlConf.Host, conf.MysqlConf.DbName)
 	db, err := gorm.Open("mysql", dataSource)
 	if err != nil {
 		fmt.Printf("gorm open failed,error:%v\n", err)
@@ -34,7 +33,7 @@ func InitDb() {
 		&model.GoodsSku{}, &model.GoodsSpu{}, &model.GoodsType{},
 		&model.GoodsBanner{}, &model.TypeGoodsBanner{},
 		&model.PromotionBanner{}, &model.OrderGoods{}, &model.OrderInfo{},
-		&model.Role{}, &model.Menu{}, &model.RoleMenu{}, &model.Dict{})
+		&model.Role{}, &model.Menu{}, &model.RoleMenu{}, &model.Member{})
 }
 
 // CloseDb main.go中调用

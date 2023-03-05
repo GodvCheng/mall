@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/model"
 	"mall/result"
 	"mall/service"
+	"mall/util"
 	"strconv"
 )
 
@@ -39,8 +39,6 @@ func UserLogin(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		//将token设置到请求头中 TODO 使用template时可以不用将token设置到请求头中
-		//c.Header("token", token)
 		result.OkWithData(c, gin.H{
 			"token": token,
 		})
@@ -66,8 +64,6 @@ func GetUserInfo(c *gin.Context) {
 func UserUpdate(c *gin.Context) {
 	var user model.User
 	c.ShouldBind(&user)
-	id, _ := strconv.Atoi(c.Param("id"))
-	user.ID = uint(id)
 	err := UserService.UpdateUser(&user)
 	if err != nil {
 		result.Fail(c, Response{
@@ -106,18 +102,14 @@ func EnableUser(c *gin.Context) {
 	}
 }
 func UploadAvatar(c *gin.Context) {
-	file, err := c.FormFile("img")
-	if err != nil {
-		return
-	}
-	name := file.Filename
-	fmt.Println(name)
+
 }
 
 func Logout(c *gin.Context) {
 	token := c.GetHeader("token")
 	if token != "" {
 		c.Request.Header.Del("token")
+		util.Rdb.Del(util.Ctx, "token")
 		result.OkWithMsg(c, "退出成功")
 	}
 }
@@ -162,7 +154,19 @@ func AdminGetUserInfo(c *gin.Context) {
 		result.OkWithData(c, user)
 	}
 }
-
+func GetProfile(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	user, err := UserService.GetProfile(id)
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithData(c, user)
+	}
+}
 func SendEmail(c *gin.Context) {
 
 }

@@ -22,8 +22,6 @@ func LoadProduct(r *gin.Engine) {
 			mAuth.GET("/list/:current/:pageSize", controller.ListGoods)
 			//展示商品详情
 			mAuth.GET("/:id", controller.ShowGoods)
-			//根据条件搜索商品
-			mAuth.POST("/goods", controller.SearchGoods)
 			//商品图片
 			mAuth.GET("/imgs/:id", controller.ListGoodsImg)
 			//商品分类
