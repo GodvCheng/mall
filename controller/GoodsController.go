@@ -84,7 +84,6 @@ func DeleteGoods(c *gin.Context) {
 func UpdateGoods(c *gin.Context) {
 	var goodsSku model.GoodsSku
 	c.ShouldBind(&goodsSku)
-	fmt.Println(goodsSku)
 	err := GoodsService.UpdateGoods(&goodsSku)
 	if err != nil {
 		result.Fail(c, Response{
@@ -169,5 +168,21 @@ func GoodsTypeInfo(c *gin.Context) {
 		})
 	} else {
 		result.OkWithData(c, goodsType)
+	}
+}
+
+func UpdateGoodsType(c *gin.Context) {
+	var goodsType model.GoodsType
+	c.ShouldBind(&goodsType)
+	fmt.Println(goodsType)
+	err := GoodsService.UpdateGoodsType(&goodsType)
+	if err != nil {
+		result.Fail(c, Response{
+			Code:    509,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		result.OkWithMsg(c, "更新成功")
 	}
 }

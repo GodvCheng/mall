@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/model"
 	"mall/result"
@@ -9,7 +10,7 @@ import (
 	"strconv"
 )
 
-var UserService = service.NewUService()
+var UserService = service.NewUserService()
 
 func UserRegister(c *gin.Context) {
 	var user model.User
@@ -47,6 +48,7 @@ func UserLogin(c *gin.Context) {
 }
 
 func GetUserInfo(c *gin.Context) {
+	//从拦截器中取出token
 	token := c.MustGet("token")
 	user, err := UserService.GetUserInfo(token.(string))
 	if err != nil {
@@ -64,6 +66,7 @@ func GetUserInfo(c *gin.Context) {
 func UserUpdate(c *gin.Context) {
 	var user model.User
 	c.ShouldBind(&user)
+	fmt.Println(user)
 	err := UserService.UpdateUser(&user)
 	if err != nil {
 		result.Fail(c, Response{
@@ -100,9 +103,6 @@ func EnableUser(c *gin.Context) {
 	} else {
 		result.OkWithMsg(c, "用户启用成功")
 	}
-}
-func UploadAvatar(c *gin.Context) {
-
 }
 
 func Logout(c *gin.Context) {

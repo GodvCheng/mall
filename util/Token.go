@@ -15,12 +15,12 @@ var JwtSecret = []byte("jadon.ji")
 type Claims struct {
 	ID        uint   `json:"id"`
 	Username  string `json:"username"`
-	Authority int    `json:"authority"`
+	Authority uint   `json:"authority"`
 	jwt.StandardClaims
 }
 
 //GenerateToken 签发用户Token
-func GenerateToken(id uint, username string, authority int) (string, error) {
+func GenerateToken(id uint, username string, authority uint) (string, error) {
 	claims := Claims{
 		ID:        id,
 		Username:  username,

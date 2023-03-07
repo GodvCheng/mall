@@ -26,6 +26,7 @@ type AliConfig struct {
 	Endpoint        string `yaml:"Endpoint" `
 	AccessKeyId     string `yaml:"AccessKeyId"`
 	AccessKeySecret string `yaml:"AccessKeySecret"`
+	BucketName      string `yaml:"BucketName"`
 }
 
 var MysqlConf MysqlConfig

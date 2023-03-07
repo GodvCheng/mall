@@ -6,7 +6,7 @@ import (
 	"mall/service/impl"
 )
 
-type UService interface {
+type UserService interface {
 	ManagerRegister(user *model.User) error
 	UserLogin(username, password string) (string, error)
 	UpdateUser(user *model.User) error
@@ -19,7 +19,7 @@ type UService interface {
 	GetProfile(id int) (*model.User, error)
 }
 
-// NewUService 创建一个UService接口
-func NewUService() UService {
+// NewUserService 创建一个UService接口
+func NewUserService() UserService {
 	return &impl.UserService{}
 }

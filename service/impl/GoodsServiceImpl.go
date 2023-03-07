@@ -13,6 +13,14 @@ var GoodsDao = dao.NewGoodsDao()
 type GoodsService struct {
 }
 
+func (g *GoodsService) UpdateGoodsType(goodsType *model.GoodsType) (err error) {
+	n := GoodsDao.UpdateGoodsType(goodsType)
+	if n == 0 {
+		err = errors.New("更新商品种类失败")
+	}
+	return
+}
+
 func (g *GoodsService) GoodsTypeInfo(id int) (goodsType *model.GoodsType, err error) {
 	goodsType = GoodsDao.GoodsTypeInfo(id)
 	if reflect.DeepEqual(goodsType, model.GoodsType{}) {
@@ -32,7 +40,7 @@ func (g *GoodsService) ListCategories() (listCategories []*model.GoodsType, err 
 func (g *GoodsService) EnableGoods(id int) (err error) {
 	n := GoodsDao.EnableGoods(id)
 	if n == 0 {
-		return errors.New("商品上架失败")
+		err = errors.New("商品上架失败")
 	}
 	return nil
 }
@@ -40,15 +48,15 @@ func (g *GoodsService) EnableGoods(id int) (err error) {
 func (g *GoodsService) DisableGoods(id int) (err error) {
 	n := GoodsDao.DisableGoods(id)
 	if n == 0 {
-		return errors.New("商品下架失败")
+		err = errors.New("商品下架失败")
 	}
-	return nil
+	return
 }
 
 func (g *GoodsService) DeleteGoods(id int) (err error) {
 	num := GoodsDao.DeleteGoods(id)
 	if num == 0 {
-		return errors.New("删除商品sku失败")
+		err = errors.New("删除商品sku失败")
 	}
 	return
 }

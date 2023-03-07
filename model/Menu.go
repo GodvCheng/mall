@@ -10,7 +10,7 @@ type Menu struct {
 	Path        string `json:"path" form:"path"`
 	Icon        string `json:"icon" form:"icon"`
 	Description string `json:"description" form:"description"`
-	Pid         int    `json:"pid" form:"pid"`
+	Pid         uint   `json:"pid" form:"pid"`
 	PagePath    string `json:"pagePath" form:"page_path"`
-	Sort        int    `json:"sort" form:"sort"`
+	Sort        uint   `json:"sort" form:"sort"`
 }

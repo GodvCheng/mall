@@ -6,7 +6,7 @@ import (
 
 type GoodsBanner struct {
 	gorm.Model
-	GoodsSkuId int    `json:"goodsSkuId"form:"goods_sku_id"` //商品sku
+	GoodsSkuId uint   `json:"goodsSkuId"form:"goods_sku_id"` //商品sku
 	Image      string `json:"image"form:"image"`             //商品图片
-	Sort       int    `json:"sort"form:"sort"`               //展示顺序
+	Sort       uint   `json:"sort"form:"sort"`               //展示顺序
 }

@@ -29,7 +29,6 @@ func (u *UserService) GetProfile(id int) (user *model.User, err error) {
 }
 
 func (u *UserService) AdminGetUserInfo(id int) (user *dto.UserDto, err error) {
-
 	user = UserDao.AdminGetUserInfo(id)
 	if reflect.DeepEqual(*user, dto.UserDto{}) {
 		return nil, errors.New("查询用户信息失败")
@@ -52,10 +51,10 @@ func (u *UserService) GetRoles(token string) (roles []*model.Role, err error) {
 	return roles, nil
 }
 
-func (u *UserService) EnableUser(id int) error {
+func (u *UserService) EnableUser(id int) (err error) {
 	n := UserDao.EnableUser(id)
 	if n == 0 {
-		return errors.New("用户启用失败")
+		err = errors.New("用户启用失败")
 	}
 	return nil
 }
@@ -87,7 +86,6 @@ func (u *UserService) ManagerRegister(user *model.User) (err error) {
 	b, err1 := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
 	if err1 != nil {
 		err = err1
-		return
 	}
 	user.Password = string(b)
 	num := UserDao.ManagerRegister(user)
@@ -106,6 +104,7 @@ func (u *UserService) GetUserInfo(token string) (userDto dto.UserDto, err error)
 	user := UserDao.GetUserInfo(username)
 	//将结构体A的值赋值给结构体B 需要先声明结构体然后取地址传入，不能直接传指针
 	util.Copy(&userDto, &user)
+	userDto.ID = user.ID
 	userDto.Roles = make([]string, 1)
 	userDto.Roles[0] = user.Role
 	return userDto, nil
@@ -130,7 +129,7 @@ func (u *UserService) UserLogin(username, password string) (token string, err er
 				//管理员authority为1，普通用户为0
 				token, _ = util.GenerateToken(user.ID, user.Username, user.Authority)
 				//将token存入redis
-				Rdb.Set(Ctx, "token", token, time.Minute*30)
+				Rdb.Set(Ctx, "token:"+username, token, time.Minute*30)
 				return token, nil
 			}
 		}

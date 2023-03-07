@@ -30,6 +30,8 @@ func LoadUser(r *gin.Engine) {
 			mAuth.POST("/upload", controller.UploadAvatar)
 			//用户获取个人信息
 			mAuth.GET("/profile/:id", controller.GetProfile)
+			//更新
+			mAuth.PUT("/update", controller.UserUpdate)
 		}
 		adminAuth := group.Group("/")
 		//超级管理员权限
@@ -41,8 +43,7 @@ func LoadUser(r *gin.Engine) {
 			adminAuth.PUT("/disable/:id", controller.DisableUser)
 			//启用用户
 			adminAuth.PUT("/enable/:id", controller.EnableUser)
-			//更新
-			adminAuth.PUT("/update", controller.UserUpdate)
+
 			//获取用户列表
 			adminAuth.GET("/userList", controller.UserList)
 			//获取角色列表

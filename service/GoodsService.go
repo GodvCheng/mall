@@ -6,7 +6,7 @@ import (
 	"mall/service/impl"
 )
 
-type GService interface {
+type GoodsService interface {
 	UpdateGoods(sku *model.GoodsSku) error
 	CreateGoods(sku *model.GoodsSku) error
 	DeleteGoods(id int) error
@@ -17,8 +17,9 @@ type GService interface {
 	EnableGoods(id int) error
 	ListCategories() ([]*model.GoodsType, error)
 	GoodsTypeInfo(id int) (*model.GoodsType, error)
+	UpdateGoodsType(goodsType *model.GoodsType) error
 }
 
-func NewGoodsService() GService {
+func NewGoodsService() GoodsService {
 	return &impl.GoodsService{}
 }

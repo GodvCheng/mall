@@ -17,8 +17,13 @@ func JWT() gin.HandlerFunc {
 		if token == "" {
 			code = result.ErrorAuthIsNull
 		} else {
+			parseToken, err := util.ParseToken(token)
+			if err != nil {
+				fmt.Errorf("token解析失败%v", err)
+			}
+			username := parseToken.Username
 			//从redis中取出token
-			redisToken := util.Rdb.Get(util.Ctx, "token")
+			redisToken := util.Rdb.Get(util.Ctx, "token:"+username)
 			if redisToken.Val() != token {
 				code = result.ErrorUserNotLogin
 			}

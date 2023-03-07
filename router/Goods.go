@@ -10,6 +10,8 @@ func LoadProduct(r *gin.Engine) {
 
 	group := r.Group("/goods")
 	{
+		//上传商品图片
+		group.POST("/upload", controller.UploadImage)
 		mAuth := group.Group("/")
 		//普通权限
 		mAuth.Use(middleware.JWT())
@@ -32,8 +34,10 @@ func LoadProduct(r *gin.Engine) {
 			mAuth.PUT("/disable/:id", controller.DisableGoods)
 			//上架商品
 			mAuth.PUT("/enable/:id", controller.EnableGoods)
-			//
+			//商品种类信息
 			mAuth.GET("/goodsType/:id", controller.GoodsTypeInfo)
+			//更新商品种类信息
+			mAuth.PUT("/goodsType/update", controller.UpdateGoodsType)
 		}
 	}
 }
