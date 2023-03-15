@@ -16,11 +16,11 @@ var UserDao = dao.NewUserDao()
 var Rdb = util.Rdb
 var Ctx = util.Ctx
 
-// UserService 管理用户服务
-type UserService struct {
+// UserServiceImpl 管理用户服务
+type UserServiceImpl struct {
 }
 
-func (u *UserService) GetProfile(id int) (user *model.User, err error) {
+func (u *UserServiceImpl) GetProfile(id int) (user *model.User, err error) {
 	user = UserDao.GetProfile(id)
 	if reflect.DeepEqual(*user, model.User{}) {
 		return nil, errors.New("查询个人信息失败")
@@ -28,7 +28,7 @@ func (u *UserService) GetProfile(id int) (user *model.User, err error) {
 	return
 }
 
-func (u *UserService) AdminGetUserInfo(id int) (user *dto.UserDto, err error) {
+func (u *UserServiceImpl) AdminGetUserInfo(id int) (user *dto.UserDto, err error) {
 	user = UserDao.AdminGetUserInfo(id)
 	if reflect.DeepEqual(*user, dto.UserDto{}) {
 		return nil, errors.New("查询用户信息失败")
@@ -36,7 +36,7 @@ func (u *UserService) AdminGetUserInfo(id int) (user *dto.UserDto, err error) {
 	return
 }
 
-func (u *UserService) GetRoles(token string) (roles []*model.Role, err error) {
+func (u *UserServiceImpl) GetRoles(token string) (roles []*model.Role, err error) {
 	claims, err1 := util.ParseToken(token)
 	if err1 != nil {
 		err = err1
@@ -51,7 +51,7 @@ func (u *UserService) GetRoles(token string) (roles []*model.Role, err error) {
 	return roles, nil
 }
 
-func (u *UserService) EnableUser(id int) (err error) {
+func (u *UserServiceImpl) EnableUser(id int) (err error) {
 	n := UserDao.EnableUser(id)
 	if n == 0 {
 		err = errors.New("用户启用失败")
@@ -59,21 +59,21 @@ func (u *UserService) EnableUser(id int) (err error) {
 	return nil
 }
 
-func (u *UserService) UserList() (userList []*dto.UserDto, err error) {
+func (u *UserServiceImpl) UserList() (userList []*dto.UserDto, err error) {
 	userList = UserDao.UserList()
 	if len(userList) == 0 {
-		return nil, errors.New("查询用户列表失败")
+		return nil, errors.New("用户列表为空")
 	}
 	return userList, nil
 }
-func (u *UserService) DisableUser(id int) (err error) {
+func (u *UserServiceImpl) DisableUser(id int) (err error) {
 	n := UserDao.DisableUser(id)
 	if n == 0 {
 		err = errors.New("用户禁用失败")
 	}
 	return
 }
-func (u *UserService) ManagerRegister(user *model.User) (err error) {
+func (u *UserServiceImpl) ManagerRegister(user *model.User) (err error) {
 	n := UserDao.ExistUser(user.Username)
 	if n != 0 {
 		return errors.New("该用户已存在，不需要重复注册")
@@ -94,7 +94,7 @@ func (u *UserService) ManagerRegister(user *model.User) (err error) {
 	}
 	return
 }
-func (u *UserService) GetUserInfo(token string) (userDto dto.UserDto, err error) {
+func (u *UserServiceImpl) GetUserInfo(token string) (userDto dto.UserDto, err error) {
 	claims, err1 := util.ParseToken(token)
 	if err1 != nil {
 		err = err1
@@ -104,13 +104,14 @@ func (u *UserService) GetUserInfo(token string) (userDto dto.UserDto, err error)
 	user := UserDao.GetUserInfo(username)
 	//将结构体A的值赋值给结构体B 需要先声明结构体然后取地址传入，不能直接传指针
 	util.Copy(&userDto, &user)
+	//因为嵌套结构体的原因，没办法直接将user中gorm.Model的id值复制给userDto的id
 	userDto.ID = user.ID
 	userDto.Roles = make([]string, 1)
 	userDto.Roles[0] = user.Role
 	return userDto, nil
 }
 
-func (u *UserService) UserLogin(username, password string) (token string, err error) {
+func (u *UserServiceImpl) UserLogin(username, password string) (token string, err error) {
 	//判断用户是否存在
 	n := UserDao.ExistUser(username)
 	if n == 0 {
@@ -136,7 +137,7 @@ func (u *UserService) UserLogin(username, password string) (token string, err er
 	}
 }
 
-func (u *UserService) UpdateUser(user *model.User) (err error) {
+func (u *UserServiceImpl) UpdateUser(user *model.User) (err error) {
 	n := UserDao.UpdateUser(user)
 	if n == 0 {
 		err = errors.New("更新失败")

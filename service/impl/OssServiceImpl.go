@@ -7,10 +7,10 @@ import (
 	"mime/multipart"
 )
 
-type OssService struct {
+type OssServiceImpl struct {
 }
 
-func (o OssService) UploadImage(fileHeader *multipart.FileHeader) (url string, err error) {
+func (o OssServiceImpl) UploadImage(fileHeader *multipart.FileHeader) (url string, err error) {
 	url, err = util.UploadGoodsImage(fileHeader)
 	if err != nil {
 		fmt.Errorf("oss faild:%v", err)
@@ -19,7 +19,7 @@ func (o OssService) UploadImage(fileHeader *multipart.FileHeader) (url string, e
 	return url, err
 }
 
-func (o OssService) UploadAvatar(fileHeader *multipart.FileHeader) (url string, err error) {
+func (o OssServiceImpl) UploadAvatar(fileHeader *multipart.FileHeader) (url string, err error) {
 	url, err = util.UserUploadAvatar(fileHeader)
 	if err != nil {
 		fmt.Errorf("oss faild:%v", err)

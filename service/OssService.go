@@ -11,5 +11,5 @@ type OssService interface {
 }
 
 func NewOssService() OssService {
-	return &impl.OssService{}
+	return &impl.OssServiceImpl{}
 }

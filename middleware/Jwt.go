@@ -58,8 +58,10 @@ func JWTAdmin() gin.HandlerFunc {
 		if token == "" {
 			code = result.ErrorAuthIsNull
 		} else {
+			parseToken, _ := util.ParseToken(token)
+			username := parseToken.Username
 			//从redis中取出token
-			redisToken := util.Rdb.Get(util.Ctx, "token")
+			redisToken := util.Rdb.Get(util.Ctx, "token:"+username)
 			if redisToken.Val() != token {
 				code = result.ErrorUserNotLogin
 			}

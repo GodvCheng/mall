@@ -16,5 +16,6 @@ func main() {
 	r.Use(middleware.Cors())
 	router.LoadUser(r)
 	router.LoadProduct(r)
+	router.LoadMember(r)
 	r.Run(":8888")
 }

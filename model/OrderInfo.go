@@ -8,7 +8,7 @@ import (
 type OrderInfo struct { //订单商品表
 	gorm.Model
 	OrderNo      string        `json:"orderNo"form:"order_no" gorm:"unique"` //订单编号
-	UserId       uint          `json:"userId"form:"user_id"`                 //用户id
+	MemberId     uint          `json:"memberId"form:"member_id"`             //用户id
 	AddressId    uint          `json:"addressId"form:"address_id"`           //地址ID
 	PayMethod    uint          `json:"payMethod"form:"pay_method"`           //付款方式
 	TotalCount   uint          `json:"totalCount"form:"total_count"`         //商品数量

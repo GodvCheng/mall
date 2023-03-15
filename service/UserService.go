@@ -9,8 +9,8 @@ import (
 type UserService interface {
 	ManagerRegister(user *model.User) error
 	UserLogin(username, password string) (string, error)
-	UpdateUser(user *model.User) error
 	GetUserInfo(token string) (dto.UserDto, error)
+	UpdateUser(user *model.User) error
 	DisableUser(id int) error
 	EnableUser(id int) error
 	UserList() ([]*dto.UserDto, error)
@@ -21,5 +21,5 @@ type UserService interface {
 
 // NewUserService 创建一个UService接口
 func NewUserService() UserService {
-	return &impl.UserService{}
+	return &impl.UserServiceImpl{}
 }

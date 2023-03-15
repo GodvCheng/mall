@@ -16,6 +16,7 @@ var Db *gorm.DB
 // InitDb 初始化数据库连接 main.go中调用
 func InitDb() {
 	dataSource := fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8mb4&parseTime=true&loc=Local", conf.MysqlConf.User, conf.MysqlConf.Password, conf.MysqlConf.Host, conf.MysqlConf.DbName)
+
 	db, err := gorm.Open("mysql", dataSource)
 	if err != nil {
 		fmt.Printf("gorm open failed,error:%v\n", err)
@@ -30,10 +31,11 @@ func InitDb() {
 	db.SingularTable(true)
 	//自动迁移
 	db.AutoMigrate(&model.User{}, &model.Address{}, &model.GoodsImage{},
-		&model.GoodsSku{}, &model.GoodsSpu{}, &model.GoodsType{},
-		&model.GoodsBanner{}, &model.TypeGoodsBanner{},
-		&model.PromotionBanner{}, &model.OrderGoods{}, &model.OrderInfo{},
-		&model.Role{}, &model.Menu{}, &model.RoleMenu{}, &model.Member{})
+		&model.Goods{}, &model.Category1{}, &model.Category2{}, &model.Category3{},
+		&model.GoodsBanner{}, &model.PromotionBanner{}, &model.OrderGoods{},
+		&model.OrderInfo{}, &model.Role{}, &model.Menu{}, &model.RoleMenu{},
+		&model.Member{})
+
 }
 
 // CloseDb main.go中调用

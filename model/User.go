@@ -16,7 +16,5 @@ type User struct {
 	Authority uint   `json:"authority"form:"authority"`        //权限
 	Role      string `json:"role"form:"role"`
 	//前端权限需要一个数组
-	Roles     []string     `json:"roles" gorm:"-"`
-	Address   []*Address   `json:"address"gorm:"-"`
-	OrderInfo []*OrderInfo `json:"orderInfo"gorm:"-"`
+	Roles []string `json:"roles" gorm:"-"`
 }
