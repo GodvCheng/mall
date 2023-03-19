@@ -10,6 +10,7 @@ func LoadProduct(r *gin.Engine) {
 
 	group := r.Group("/goods")
 	{
+		group.GET("/imgs/:id", controller.ListGoodsImg)
 		//上传商品图片
 		group.POST("/upload", controller.UploadImage)
 		mAuth := group.Group("/")
@@ -21,13 +22,13 @@ func LoadProduct(r *gin.Engine) {
 			//更新商品
 			mAuth.PUT("/update", controller.UpdateGoods)
 			//查询所有商品
-			mAuth.GET("/list/:current/:pageSize", controller.ListGoods)
+			mAuth.POST("/list/:current/:pageSize", controller.ListGoods)
 			//根据三级分类Id查询商品
 			//mAuth.GET("/list/:category3Id/:current/:pageSize")
 			// 展示商品详情
 			mAuth.GET("/:id", controller.ShowGoods)
 			//商品图片
-			mAuth.GET("/imgs/:id", controller.ListGoodsImg)
+			//mAuth.GET("/imgs/:id", controller.ListGoodsImg)
 			//TODO 轮播图
 			mAuth.GET("/carousels", controller.ListCarousels)
 			//下架商品

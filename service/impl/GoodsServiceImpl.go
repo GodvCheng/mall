@@ -196,8 +196,8 @@ func (g *GoodsServiceImpl) ShowGoods(id int) (goods *dto.GoodsDto, err error) {
 	return
 }
 
-func (g *GoodsServiceImpl) ListGoods(current, pageSize int) (goodsList []*dto.GoodsDto, total int, err error) {
-	goodsList, total = GoodsDao.ListGoods(current, pageSize)
+func (g *GoodsServiceImpl) ListGoods(goods *model.Goods, current, pageSize int) (goodsList []*dto.GoodsDto, total int, err error) {
+	goodsList, total = GoodsDao.ListGoods(goods, current, pageSize)
 	if len(goodsList) == 0 || total == 0 {
 		return nil, 0, errors.New("商品列表为空")
 	}

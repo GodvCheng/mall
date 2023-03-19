@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"mall/model"
 	"mall/result"
@@ -32,7 +33,10 @@ func CreateGoods(c *gin.Context) {
 func ListGoods(c *gin.Context) {
 	current, _ := strconv.Atoi(c.Param("current"))
 	pageSize, _ := strconv.Atoi(c.Param("pageSize"))
-	goodsList, total, err := GoodsService.ListGoods(current, pageSize)
+	var goods model.Goods
+	c.ShouldBind(&goods)
+	fmt.Println(goods)
+	goodsList, total, err := GoodsService.ListGoods(&goods, current, pageSize)
 	if err != nil {
 		result.Fail(c, Response{
 			Code:    result.ERROR,
@@ -88,7 +92,9 @@ func ShowGoods(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, goods)
+		result.OkWithData(c, gin.H{
+			"goods": goods,
+		})
 	}
 }
 
@@ -103,7 +109,9 @@ func ListGoodsImg(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, imgList)
+		result.OkWithData(c, gin.H{
+			"imgList": imgList,
+		})
 	}
 }
 
@@ -157,7 +165,9 @@ func ListCategory3(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, listCategory3)
+		result.OkWithData(c, gin.H{
+			"listCategory3": listCategory3,
+		})
 	}
 }
 
@@ -172,7 +182,9 @@ func ListCategory2(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, listCategory2)
+		result.OkWithData(c, gin.H{
+			"listCategory2": listCategory2,
+		})
 	}
 }
 
@@ -205,7 +217,9 @@ func Category3Info(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, category3)
+		result.OkWithData(c, gin.H{
+			"category3": category3,
+		})
 	}
 }
 
@@ -219,7 +233,9 @@ func Category2Info(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, category2)
+		result.OkWithData(c, gin.H{
+			"category2": category2,
+		})
 	}
 }
 
@@ -233,7 +249,9 @@ func Category1Info(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, category1)
+		result.OkWithData(c, gin.H{
+			"category1": category1,
+		})
 	}
 }
 

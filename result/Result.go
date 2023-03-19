@@ -6,12 +6,12 @@ import (
 )
 
 type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Code    int                    `json:"code"`
+	Message string                 `json:"message"`
+	Data    map[string]interface{} `json:"data"`
 }
 
-func Result(c *gin.Context, code int, msg string, data interface{}) {
+func Result(c *gin.Context, code int, msg string, data map[string]interface{}) {
 	c.JSON(http.StatusOK, Response{
 		code,
 		msg,
@@ -30,7 +30,7 @@ func Ok(c *gin.Context) {
 	OkWithData(c, nil)
 }
 
-func OkWithData(c *gin.Context, data interface{}) {
+func OkWithData(c *gin.Context, data map[string]interface{}) {
 	Result(c, SUCCESS, MsgFlags[SUCCESS], data)
 }
 

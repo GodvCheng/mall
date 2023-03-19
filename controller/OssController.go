@@ -18,7 +18,9 @@ func UploadAvatar(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, url)
+		result.OkWithData(c, gin.H{
+			"url": url,
+		})
 	}
 }
 
@@ -32,6 +34,8 @@ func UploadImage(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, url)
+		result.OkWithData(c, gin.H{
+			"url": url,
+		})
 	}
 }

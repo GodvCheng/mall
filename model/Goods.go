@@ -13,7 +13,7 @@ type Goods struct {
 	Image            string         `json:"image"form:"image"`   //商品图片
 	Sales            uint           `json:"sales"form:"sales"`   //商品销量 新建商品时默认为0
 	Stock            uint           `json:"stock"form:"stock"`   //商品库存
-	Status           uint           `json:"status"form:"status"` //商品状态 上架或下架
+	Status           uint           `json:"status"form:"status"` //商品状态 1 上架或 2 下架
 	Category3Id      uint           `json:"category3Id"form:"category3_id"`
 	GoodsImage       []*GoodsImage  `json:"goodsImage"gorm:"-"`
 	IndexGoodsBanner []*GoodsBanner `json:"indexGoodsBanner"gorm:"-"`

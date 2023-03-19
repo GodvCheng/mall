@@ -58,9 +58,10 @@ func GetUserInfo(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, user)
+		result.OkWithData(c, gin.H{
+			"user": user,
+		})
 	}
-
 }
 
 func UserUpdate(c *gin.Context) {
@@ -123,7 +124,9 @@ func UserList(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, userList)
+		result.OkWithData(c, gin.H{
+			"userList": userList,
+		})
 	}
 }
 
@@ -137,7 +140,9 @@ func GetRoles(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, roles)
+		result.OkWithData(c, gin.H{
+			"roles": roles,
+		})
 	}
 }
 
@@ -151,7 +156,9 @@ func AdminGetUserInfo(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, user)
+		result.OkWithData(c, gin.H{
+			"user": user,
+		})
 	}
 }
 func GetProfile(c *gin.Context) {
@@ -164,7 +171,9 @@ func GetProfile(c *gin.Context) {
 			Data:    nil,
 		})
 	} else {
-		result.OkWithData(c, user)
+		result.OkWithData(c, gin.H{
+			"user": user,
+		})
 	}
 }
 func SendEmail(c *gin.Context) {

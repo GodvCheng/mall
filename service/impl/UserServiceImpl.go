@@ -130,7 +130,7 @@ func (u *UserServiceImpl) UserLogin(username, password string) (token string, er
 				//管理员authority为1，普通用户为0
 				token, _ = util.GenerateToken(user.ID, user.Username, user.Authority)
 				//将token存入redis
-				Rdb.Set(Ctx, "token:"+username, token, time.Minute*30)
+				Rdb.Set(Ctx, "token:"+username, token, time.Minute*60)
 				return token, nil
 			}
 		}

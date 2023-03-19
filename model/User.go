@@ -12,7 +12,7 @@ type User struct {
 	Phone     string `json:"phone"form:"phone" gorm:"unique" ` //手机号
 	Email     string `json:"email"form:"email" gorm:"unique" ` //邮箱
 	Avatar    string `json:"avatar"form:"avatar"`              //头像
-	Status    uint   `json:"status"form:"status"`              //状态 0:未激活 1:激活
+	Status    uint   `json:"status"form:"status"`              //状态 2:未激活 1:激活
 	Authority uint   `json:"authority"form:"authority"`        //权限
 	Role      string `json:"role"form:"role"`
 	//前端权限需要一个数组

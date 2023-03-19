@@ -11,7 +11,7 @@ type GoodsService interface {
 	CreateGoods(sku *model.Goods) error
 	ShowGoods(id int) (*dto.GoodsDto, error)
 	DeleteGoods(id int) error
-	ListGoods(current, pageSize int) ([]*dto.GoodsDto, int, error)
+	ListGoods(goods *model.Goods, current, pageSize int) ([]*dto.GoodsDto, int, error)
 	ListGoodsImg(id int) (imgList []string, err error)
 	DisableGoods(id int) error
 	EnableGoods(id int) error

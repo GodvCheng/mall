@@ -56,7 +56,7 @@ func (u *UserDaoImpl) UserList() (userList []*dto.UserDto) {
 }
 
 func (u *UserDaoImpl) DisableUser(userId int) int {
-	num := Db.Model(&model.User{}).Where("id = ?", userId).Update("status", 0).RowsAffected
+	num := Db.Model(&model.User{}).Where("id = ?", userId).Update("status", 2).RowsAffected
 	return int(num)
 }
 

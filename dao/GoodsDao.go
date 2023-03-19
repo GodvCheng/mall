@@ -3,12 +3,13 @@ package dao
 import (
 	"mall/model"
 	"mall/model/dto"
+	"strings"
 )
 
 type GoodsDao interface {
 	CreateGoods(goods *model.Goods) int
 	UpdateGoods(goods *model.Goods) int
-	ListGoods(current, pageSize int) ([]*dto.GoodsDto, int)
+	ListGoods(goods *model.Goods, current, pageSize int) ([]*dto.GoodsDto, int)
 	ShowGoods(id int) *dto.GoodsDto
 	ListGoodsImg(id int) []string
 	DeleteGoods(id int) int
@@ -120,9 +121,22 @@ func (g *GoodsDaoImpl) ListCategory3(category2Id int) (listCategory3 []*model.Ca
 	return
 }
 
-func (g *GoodsDaoImpl) ListGoods(current, pageSize int) (goodsList []*dto.GoodsDto, total int) {
-	Db.Table("goods").Scopes(Paginate(current, pageSize)).Find(&goodsList)
-	Db.Table("goods").Count(&total)
+func (g *GoodsDaoImpl) ListGoods(goods *model.Goods, current, pageSize int) (goodsList []*dto.GoodsDto, total int) {
+
+	switch {
+	case strings.TrimSpace(goods.Name) != "" && goods.Status != 0:
+		Db.Table("goods").Where("name like ? and status = ?", "%"+goods.Name+"%", goods.Status).Scopes(Paginate(current, pageSize)).Find(&goodsList)
+		Db.Table("goods").Where("name like ? and status = ?", "%"+goods.Name+"%", goods.Status).Count(&total)
+	case strings.TrimSpace(goods.Name) != "":
+		Db.Table("goods").Where("name like ? ", "%"+goods.Name+"%").Scopes(Paginate(current, pageSize)).Find(&goodsList)
+		Db.Table("goods").Where("name like ? ", "%"+goods.Name+"%").Count(&total)
+	case goods.Status != 0:
+		Db.Table("goods").Where("status = ?", goods.Status).Scopes(Paginate(current, pageSize)).Find(&goodsList)
+		Db.Table("goods").Where("status = ?", goods.Status).Count(&total)
+	default:
+		Db.Table("goods").Scopes(Paginate(current, pageSize)).Find(&goodsList)
+		Db.Table("goods").Count(&total)
+	}
 	return
 }
 func (g *GoodsDaoImpl) ShowGoods(id int) *dto.GoodsDto {
@@ -137,7 +151,7 @@ func (g *GoodsDaoImpl) EnableGoods(id int) int {
 }
 
 func (g *GoodsDaoImpl) DisableGoods(id int) int {
-	n := Db.Model(&model.Goods{}).Where("id = ?", id).Update("status", 0).RowsAffected
+	n := Db.Model(&model.Goods{}).Where("id = ?", id).Update("status", 2).RowsAffected
 	return int(n)
 }
 

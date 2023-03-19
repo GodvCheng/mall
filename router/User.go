@@ -4,15 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"mall/controller"
 	"mall/middleware"
-	"net/http"
 )
 
 func LoadUser(r *gin.Engine) {
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "ok",
-		})
-	})
 
 	group := r.Group("/user")
 	{
