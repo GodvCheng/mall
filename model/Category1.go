@@ -6,5 +6,5 @@ import "github.com/jinzhu/gorm"
 type Category1 struct {
 	gorm.Model
 	Name          string       `json:"name"form:"name"`
-	Category2List []*Category2 `gorm:"-"`
+	Category2List []*Category2 `json:"children"gorm:"-"`
 }
